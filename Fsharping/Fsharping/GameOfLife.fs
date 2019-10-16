@@ -2,7 +2,7 @@
 
 open System
 
-let size = 10
+let size = 8
 
 let add x y = x + y   
 
@@ -12,10 +12,17 @@ let getReal x =
     else x
 
 let colorValue valueIndex value vectorIndex (matrixAfter : int list list) =
-    if value = 1 && matrixAfter.[vectorIndex].[valueIndex] = 1 then "o>o"
-    elif value = 1 && matrixAfter.[vectorIndex].[valueIndex] = 0 then "o>x"
-    elif value = 0 && matrixAfter.[vectorIndex].[valueIndex] = 1 then "x>o"
-    else "x>x"
+    //if value = 1 && matrixAfter.[vectorIndex].[valueIndex] = 1 then "o>o"
+    //elif value = 1 && matrixAfter.[vectorIndex].[valueIndex] = 0 then "o>x"
+    //elif value = 0 && matrixAfter.[vectorIndex].[valueIndex] = 1 then "x>o"
+    //else "x>x"
+
+    match (value, matrixAfter.[vectorIndex].[valueIndex]) with
+    | (1,1) -> "o>o"
+    | (1,0) -> "o>x"
+    | (0,1) -> "x>o"
+    | (0,0) -> "x>x"
+    | (_,_) -> "?"
 
 let colorVector vectorIndex vector matrixAfter =
     vector
@@ -33,10 +40,10 @@ let nextValue valueIndex value vectorIndex (matrix : int list list) =
         yield matrix.[getReal (vectorIndex + 1)].[getReal (valueIndex + 1)]]
 
     let sousediSum = List.sum sousedi
-    if value = 1 && sousediSum > 3 then 0
+    if value = 0 && sousediSum = 3 then 1
     elif value = 1 && (sousediSum = 2 || sousediSum = 3) then 1
-    elif sousediSum < 2 then 0
-    else 1
+    elif value = 1 && (sousediSum > 3 || sousediSum < 2) then 0
+    else 0
 
 let nextVector vectorIndex vector matrix =
     vector
